@@ -10,6 +10,8 @@ public:
     ~Bitmap();
     void set(size_t index);
     bool read(size_t index);
+    void setSector(size_t index, uint64_t mask);
+    bool readSector(size_t index, uint64_t mask);
 
 private:
     uint64_t* bitmap_;

@@ -5,7 +5,7 @@
 
 namespace Utils {
     const static size_t CACHE_LINE_BYTES = 64;
-    const static size_t REGISTER_BYTES = 8;
+    const static size_t REGISTER_BITS = 64;
     // Bitmap is array of 8 bits each
     const static size_t BITMAP_UNIT = 64;
 

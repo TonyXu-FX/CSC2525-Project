@@ -27,6 +27,14 @@ bool Bitmap::read(size_t index) {
     return (bitmap_[arrIndex] & (1ULL << offset)) != 0;
 }
 
+void Bitmap::setSector(size_t index, uint64_t mask) {
+    bitmap_[index] |= mask;
+}
+
+bool Bitmap::readSector(size_t index, uint64_t mask) {
+    return (bitmap_[index] & mask) == mask;
+}
+
 Bitmap::~Bitmap() {
     free(bitmap_);
 }

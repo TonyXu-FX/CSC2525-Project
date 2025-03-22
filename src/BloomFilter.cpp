@@ -11,7 +11,7 @@ BloomFilter::BloomFilter(size_t bitsPerEntry, size_t numEntries)
     , numEntries_(numEntries)
     , size_(Utils::roundUp(bitsPerEntry_ * numEntries_, Utils::BITMAP_UNIT))
     , bitmap_(size_)
-    , numHashFuncs_(static_cast<size_t>(std::round(std::log(2) * bitsPerEntry_))) {
+    , numHashFuncs_(static_cast<size_t>(std::ceil(std::log(2) * bitsPerEntry_))) {
 
     }
 
