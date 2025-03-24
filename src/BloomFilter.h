@@ -12,7 +12,6 @@ public:
     void insert(int64_t entry);
     bool query(int64_t entry);
 
-private:
     size_t bitsPerEntry_;
     size_t numEntries_;
     // Rounded up to multiple of 8

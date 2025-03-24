@@ -1,1 +1,5 @@
 .vscode
+my_program
+/build
+/bin
+gmon.out

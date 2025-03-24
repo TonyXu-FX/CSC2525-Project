@@ -13,7 +13,6 @@ public:
     void setSector(size_t index, uint64_t mask);
     bool readSector(size_t index, uint64_t mask);
 
-private:
     uint64_t* bitmap_;
     size_t size_;
 };

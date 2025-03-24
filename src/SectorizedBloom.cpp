@@ -48,5 +48,5 @@ bool SectorizedBloom::query(int64_t entry) {
 
 size_t SectorizedBloom::getFirstSectorIndex(int64_t entry) {
     size_t blockNum = xxh::xxhash3<64>(&entry, sizeof(int64_t), 0) % numBlocks_;
-    size_t sectorIndex = blockNum * wordsPerBlock_;
+    return blockNum * wordsPerBlock_;
 }

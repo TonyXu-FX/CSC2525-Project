@@ -12,7 +12,6 @@ SectorizedBloom(size_t bitsPerEntry, size_t numEntries, size_t wordsPerBlock);
     void insert(int64_t entry);
     bool query(int64_t entry);
 
-private:
     size_t bitsPerEntry_;
     size_t numEntries_;
     // Must be power of 2

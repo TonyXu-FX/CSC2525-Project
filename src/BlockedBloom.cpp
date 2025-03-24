@@ -37,5 +37,5 @@ bool BlockedBloom::query(int64_t entry) {
 
 size_t BlockedBloom::getBlockIndex(int64_t entry) {
     size_t blockNum = xxh::xxhash3<64>(&entry, sizeof(int64_t), 0) % numBlocks_;
-    size_t blockIndex = blockNum * blockSize_;
+    return blockNum * blockSize_;
 }
