@@ -1,9 +1,15 @@
-#include <iostream>
 #include "unistd.h"
 #include "BloomFilter.h"
 #include "BlockedBloom.h"
 #include "SectorizedBloom.h"
+#include <iostream>
+#include <fstream>
 #include <cassert>
+#include <memory>
+#include <list>
+#include <chrono>
+#include <iomanip>
+#include <cmath>
 
 bool bloomFilterTests() {
     std::cout << "===Bloom Filter Tests===" << std::endl;
@@ -118,9 +124,72 @@ bool sectorizedBloomTests() {
     return true;
 }
 
+void fixedBPEIncreasedEntriesTest() {
+    std::ofstream outfile("fixedBPE_results.csv");
+    if (!outfile.is_open()) {
+        std::cerr << "Error: Unable to open the output file!" << std::endl;
+        return; // Exit early if file can't be opened
+    }
+
+    outfile << "DataSize(KB);Bloom;Blocked Bloom;Sectorized Bloom" << std::endl;
+
+    size_t bitsPerEntry = 12; // 9 hash functions
+    for (int i = 1; i <= 10; i++) {
+        size_t numEntries = 75'000 * static_cast<size_t>(pow(2, i));
+
+        std::cout << "---Testing Bloom---" << std::endl;
+        std::unique_ptr<BloomFilter> bloom = std::make_unique<BloomFilter>(bitsPerEntry, numEntries);
+        size_t dataSizeKB = bloom->bitmap_.size_ / (1024 * 8);
+        auto start = std::chrono::high_resolution_clock::now();
+        for (size_t entry = 0; entry < numEntries; entry++) {
+            bloom->insert(entry << 1);
+        }
+        auto end = std::chrono::high_resolution_clock::now();
+        double elapsedBloom = std::chrono::duration<double>(end - start).count();
+        double throughputBloom = numEntries / elapsedBloom;
+        bloom.reset();
+        std::cout << "---Testing Bloom Done---" << std::endl;
+
+        std::cout << "---Testing Blocked Bloom---" << std::endl;
+        std::unique_ptr<BlockedBloom> blockedBloom = std::make_unique<BlockedBloom>(bitsPerEntry, numEntries, 8);
+        start = std::chrono::high_resolution_clock::now();
+        for (size_t entry = 0; entry < numEntries; entry++) {
+            blockedBloom->insert(entry << 1);
+        }
+        end = std::chrono::high_resolution_clock::now();
+        double elapsedBlocked = std::chrono::duration<double>(end - start).count();
+        double throughputBlocked = numEntries / elapsedBlocked;
+        blockedBloom.reset();
+        std::cout << "---Testing Blocked Bloom Done---" << std::endl;
+
+        std::cout << "---Testing Sectorized Bloom---" << std::endl;
+        std::unique_ptr<SectorizedBloom> sectorizedBloom = std::make_unique<SectorizedBloom>(bitsPerEntry, numEntries, 8);
+        start = std::chrono::high_resolution_clock::now();
+        for (size_t entry = 0; entry < numEntries; entry++) {
+            sectorizedBloom->insert(entry << 1);
+        }
+        end = std::chrono::high_resolution_clock::now();
+        double elapsedSectorized = std::chrono::duration<double>(end - start).count();
+        double throughputSectorized = numEntries / elapsedSectorized;
+        sectorizedBloom.reset();
+        std::cout << "---Testing Sectorized Bloom Done---" << std::endl;
+
+        outfile << std::fixed << std::setprecision(1)
+                << dataSizeKB << ";"
+                << throughputBloom << ";"
+                << throughputBlocked << ";"
+                << throughputSectorized << std::endl;
+    }
+    outfile.close();
+}
+
 int main() {
+    /*
     assert(bloomFilterTests());
     assert(blockedBloomTests());
-    assert(sectorizedBloomTests());
+    assert(sectorizedBloomTests());*/
+
+    fixedBPEIncreasedEntriesTest();
+
     return 0;
 }
