@@ -7,8 +7,8 @@
 
 bool bloomFilterTests() {
     std::cout << "===Bloom Filter Tests===" << std::endl;
-    BloomFilter bloom(11, 1000);
-    if (bloom.numHashFuncs_ != 8) {
+    BloomFilter bloom(12, 1000);
+    if (bloom.numHashFuncs_ != 9) {
         std::cout << "Wrong num hash functions" << std::endl;
         return false;
     }
@@ -36,8 +36,8 @@ bool bloomFilterTests() {
 
 bool blockedBloomTests() {
     std::cout << "===Blocked Bloom Filter Tests===" << std::endl;
-    BlockedBloom blockedBloom(11, 1000, 8);
-    if (blockedBloom.numHashFuncs_ != 8) {
+    BlockedBloom blockedBloom(12, 1000, 8);
+    if (blockedBloom.numHashFuncs_ != 9) {
         std::cout << "Wrong num hash functions" << std::endl;
         return false;
     }
@@ -70,8 +70,8 @@ bool blockedBloomTests() {
 bool sectorizedBloomTests() {
     std::cout << "===Sectorized Bloom Filter Tests===" << std::endl;
     std::cout << "---Standard Queries---" << std::endl;
-    SectorizedBloom sectorizedBloom(11, 1000, 8);
-    if (sectorizedBloom.numHashFuncs_ != 8) {
+    SectorizedBloom sectorizedBloom(12, 1000, 8);
+    if (sectorizedBloom.numHashFuncs_ != 9) {
         std::cout << "Wrong num hash functions" << std::endl;
         return false;
     }
