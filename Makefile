@@ -2,16 +2,16 @@
 CXX = g++
 
 # Base compiler flags
-CXXFLAGS_BASE = -I./src -Wall -std=c++2a -O1
+CXXFLAGS_BASE = -I./src -Wall -std=c++2a 
 
 # Release-specific flags
-CXXFLAGS_RELEASE = $(CXXFLAGS_BASE) -DNDEBUG
+CXXFLAGS_RELEASE = $(CXXFLAGS_BASE) -DNDEBUG -O2
 
 # Test-specific flags
-CXXFLAGS_TEST = $(CXXFLAGS_BASE) -pg
+CXXFLAGS_TEST = $(CXXFLAGS_BASE) -pg -O1
 
 # Debug-specific flags
-CXXFLAGS_DEBUG = $(CXXFLAGS_BASE) -g -fsanitize=address -DDEBUG
+CXXFLAGS_DEBUG = $(CXXFLAGS_BASE) -g -fsanitize=address -DDEBUG -O1
 
 # Directories
 SRC_DIR = src

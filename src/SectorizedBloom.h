@@ -2,11 +2,12 @@
 #define SECTORIZED_BLOOM_H
 
 #include "Bitmap.h"
+#include "Filter.h"
 
 #include <stdio.h>
 #include <cstdint>
 
-class SectorizedBloom {
+class SectorizedBloom : public Filter {
 public:
 SectorizedBloom(size_t bitsPerEntry, size_t numEntries, size_t wordsPerBlock);
     void insert(int64_t entry);

@@ -2,11 +2,12 @@
 #define BLOCKED_BLOOM_H
 
 #include "Bitmap.h"
+#include "Filter.h"
 
 #include <stdio.h>
 #include <cstdint>
 
-class BlockedBloom {
+class BlockedBloom : public Filter {
 public:
     BlockedBloom(size_t bitsPerEntry, size_t numEntries, size_t wordsPerBlock);
     void insert(int64_t entry);

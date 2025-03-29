@@ -2,11 +2,12 @@
 #define BLOOM_FILTER_H
 
 #include "Bitmap.h"
+#include "Filter.h"
 
 #include <stdio.h>
 #include <cstdint>
 
-class BloomFilter {
+class BloomFilter : public Filter {
 public:
     BloomFilter(size_t bitsPerEntry, size_t numEntries);
     void insert(int64_t entry);
