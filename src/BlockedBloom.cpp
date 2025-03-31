@@ -13,7 +13,7 @@ BlockedBloom::BlockedBloom(size_t bitsPerEntry, size_t numEntries, size_t wordsP
     , blockSize_(Utils::REGISTER_BITS * wordsPerBlock_)
     , size_(Utils::roundUp(bitsPerEntry_ * numEntries_, blockSize_))
     , numBlocks_(static_cast<size_t>(size_ / blockSize_))
-    , numHashFuncs_(static_cast<size_t>(std::ceil(std::log(2) * bitsPerEntry_)))
+    , numHashFuncs_(static_cast<size_t>(std::round(std::log(2) * bitsPerEntry_)))
     , bitmap_(size_) {
     }
 
