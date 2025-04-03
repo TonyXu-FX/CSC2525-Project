@@ -3,3 +3,6 @@ my_program
 /build
 /bin
 gmon.out
+fixedBPE_results.csv
+fixedEntriesFpr_results.csv
+fixedEntriesThroughput_results.csv

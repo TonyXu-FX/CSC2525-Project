@@ -144,8 +144,7 @@ int throughputExp(Filter& filter, size_t numEntries) {
     return throughput;
 }
 
-long double fprExp(Filter& filter) {
-    size_t numQueries = 100'000;
+size_t fprExp(Filter& filter, size_t numQueries) {
     size_t numFalsePositives = 0;
     for (size_t i = 0; i < numQueries; i++) {
         std::random_device rd;
@@ -153,7 +152,7 @@ long double fprExp(Filter& filter) {
         std::uniform_int_distribution<int64_t> dist(0, 10'000'000);
         if (filter.query(2 * dist(mt) + 1)) numFalsePositives++;
     }
-    return static_cast<long double>(numFalsePositives) / (numQueries / 100);
+    return numFalsePositives;
 }
 
 void fixedNumEntriesExps() {
@@ -172,13 +171,15 @@ void fixedNumEntriesExps() {
     fprFile << "Bits/Entry;Bloom;Blocked Bloom;Sectorized Bloom" << std::endl;
 
     size_t numEntries = 8 * 1024 * 1024;
-    size_t bprTest[7] = { 6, 13, 18, 24, 30, 36, 48 };
-    for (int i = 0; i < 7; i++) {
+    int numTests = 8;
+    size_t bprTest[numTests] = { 6, 13, 18, 24, 30, 36, 42, 48 };
+    size_t fprNumQueries = 1'000'000;
+    for (int i = 0; i < numTests; i++) {
         size_t bitsPerEntry = bprTest[i];
         std::cout << "---Testing Bloom---" << std::endl;
         std::unique_ptr<BloomFilter> bloom = std::make_unique<BloomFilter>(bitsPerEntry, numEntries);
         double throughputBloom = throughputExp(*bloom, numEntries);
-        long double fprBloom = fprExp(*bloom);
+        size_t fprBloom = fprExp(*bloom, fprNumQueries);
         bloom.reset();
         std::cout << "---Testing Bloom Done---" << std::endl;
 
@@ -186,7 +187,7 @@ void fixedNumEntriesExps() {
         std::unique_ptr<BlockedBloom> blockedBloom = std::make_unique<BlockedBloom>(bitsPerEntry, numEntries, 8);
         std::cout << blockedBloom->numHashFuncs_ << std::endl;
         double throughputBlocked = throughputExp(*blockedBloom, numEntries);
-        long double fprBlocked = fprExp(*blockedBloom);
+        size_t fprBlocked = fprExp(*blockedBloom, fprNumQueries);
         blockedBloom.reset();
         std::cout << "---Testing Blocked Bloom Done---" << std::endl;
 
@@ -195,7 +196,7 @@ void fixedNumEntriesExps() {
         std::cout << sectorizedBloom->numHashFuncs_ << std::endl;
         std::cout << sectorizedBloom->hashesPerSector_ << std::endl;
         double throughputSectorized = throughputExp(*sectorizedBloom, numEntries);
-        long double fprSectorized = fprExp(*sectorizedBloom);
+        size_t fprSectorized = fprExp(*sectorizedBloom, fprNumQueries);
         sectorizedBloom.reset();
         std::cout << "---Testing Sectorized Bloom Done---" << std::endl;
 
@@ -262,12 +263,12 @@ void runTests() {
 }
 
 void runExps() {
-    //fixedBpeExps();
+    fixedBpeExps();
     fixedNumEntriesExps();
 }
 
 int main() {
-    //runTests();
+    runTests();
     runExps();    
 
     return 0;
